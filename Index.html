@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>RGG LIDE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    /* ---- Базовые стили ---- */
+    * { box-sizing: border-box; }
+    html,body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: #000;
+      color: #eee;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      position: relative;
+      animation: flashBg 6s infinite;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 1.75rem;
+      background: rgba(0,0,0,0.86);
+      position: sticky;
+      top: 0;
+      z-index: 120;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      backdrop-filter: blur(6px);
+    }
+
+    /* логотип — умеренная, но заметная тряска */
+    .logo {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      font-size: 1.2rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      position: relative;
+    }
+    .logo .part {
+      display: inline-block;
+      transform-origin: center;
+      animation: logoShake 2.1s infinite ease-in-out;
+    }
+    /* логика: небольшой сдвиг/поворот — видно при внимательном просмотре */
+    @keyframes logoShake {
+      0%   { transform: translate(0,0) rotate(0deg); }
+      10%  { transform: translate(-0.5px, 0.6px) rotate(-0.25deg); }
+      25%  { transform: translate(0.6px, -0.5px) rotate(0.35deg); }
+      45%  { transform: translate(-0.4px, 0.3px) rotate(-0.15deg); }
+      65%  { transform: translate(0.3px, -0.4px) rotate(0.2deg); }
+      85%  { transform: translate(-0.5px, 0.5px) rotate(-0.25deg); }
+      100% { transform: translate(0,0) rotate(0deg); }
+    }
+
+    nav { display: flex; gap: .5rem; align-items: center; }
+    nav a {
+      color: #9aa;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: .85rem;
+      padding: .45rem .75rem;
+      border-radius: 6px;
+    }
+    nav a.active {
+      color: #fff;
+      box-shadow: 0 6px 30px rgba(0,0,0,0.6), inset 0 -1px 0 rgba(255,255,255,0.02);
+      background: linear-gradient(90deg, rgba(255,0,150,0.03), rgba(0,200,255,0.02));
+      text-shadow: 0 0 8px rgba(255,0,150,0.05);
+    }
+    nav a:hover { color: #fff; }
+
+    main { padding: 2.5rem 1.25rem; max-width: 1200px; margin: 0 auto; z-index: 2; position: relative; }
+
+    section { display: none; padding-bottom: 2.5rem; }
+
+    h2 {
+      font-size: 1.6rem;
+      margin: 0 0 1rem 0;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    /* треки: плитки */
+    .tracks {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .card {
+      background: rgba(18,18,18,0.66);
+      border: 1px solid rgba(255,255,255,0.03);
+      padding: 1rem;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    /* мягкая тряска при hover — слабая, но заметна */
+    .card:hover {
+      animation: cardShake .45s linear;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+      transform: translateY(-2px);
+    }
+    @keyframes cardShake {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(-0.8px, 0.8px) rotate(-0.2deg); }
+      50% { transform: translate(0.8px, -0.6px) rotate(0.2deg); }
+      75% { transform: translate(-0.6px, -0.6px) rotate(-0.1deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+
+    /* тонкий глитч-перелив на карточках */
+    .card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(255,0,150,0.04), rgba(0,200,255,0.03));
+      mix-blend-mode: screen;
+      pointer-events: none;
+      animation: subtleSlide 6s linear infinite;
+    }
+    @keyframes subtleSlide { from { transform: translateX(-100%) } to { transform: translateX(100%) } }
+
+    iframe { width: 100%; height: 140px; border: none; border-radius: 10px; }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #777;
+      font-size: .85rem;
+      border-top: 1px solid rgba(255,255,255,0.02);
+    }
+
+    /* фоновые сканлайны + случайная микро-перемена цвета на миллисекунду */
+    .bg-noise::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: repeating-linear-gradient(0deg, rgba(255,255,255,0.01) 0, transparent 2px);
+      mix-blend-mode: overlay; pointer-events: none;
+      z-index: 1;
+      animation: bgShift 8s linear infinite;
+    }
+    @keyframes bgShift { 0% { transform: translateY(0) } 100% { transform: translateY(-100%) } }
+
+    @keyframes flashBg {
+      0%, 96%,100% { background-color: #000; }
+      97% { background-color: #060606; }
+      98% { background-color: #0d0d10; }
+      99% { background-color: #030003; }
+    }
+    /* запасной стиль для видимой ошибки/сообщения */
+    .fallback {
+      padding: .75rem; border-radius: 8px;
+      background: rgba(255,255,255,0.02); color: #c9d; font-size: .95rem;
+    }
+
+    /* адаптация мобильная */
+    @media (max-width:640px){
+      header { padding: .9rem 1rem; }
+      .logo { font-size: 1rem; }
+      iframe { height: 120px; }
+    }
+  </style>
+</head>
+<body class="bg-noise">
+  <header>
+    <div class="logo" aria-hidden="true">
+      <!-- делаем логотип из отдельных span, чтобы анимация выглядела естественной -->
+      <span class="part">R</span><span class="part">G</span><span class="part">G</span><span class="part">&nbsp;</span><span class="part">L</span><span class="part">I</span><span class="part">D</span><span class="part">E</span>
+    </div>
+
+    <nav role="navigation" aria-label="Главное меню">
+      <a href="#home" data-tab="home" class="active">Главная</a>
+      <a href="#tracks" data-tab="tracks">Треки</a>
+      <a href="#about" data-tab="about">О RGG LIDE</a>
+      <a href="#news" data-tab="news">Новости</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HOME -->
+    <section id="home" aria-labelledby="h-home">
+      <h2 id="h-home">Последние релизы</h2>
+      <div class="tracks">
+        <!-- вставь свои Spotify-track embed-URL-ы сюда -->
+        <div class="card">
+          <iframe src="https://open.spotify.com/embed/track/4zLiuafv99FGQ3pMK2eUDz?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+        </div>
+        <div class="card">
+          <iframe src="https://open.spotify.com/embed/track/5rCVuNbPVCctllSavYOhR8?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+        </div>
+        <div class="card">
+          <iframe src="https://open.spotify.com/embed/track/1wwV1wwid209AZlpBNVrdH?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+        </div>
+      </div>
+
+      <h2 style="margin-top:1.5rem">Топ трек</h2>
+      <div class="tracks" style="margin-top:.5rem">
+        <div class="card">
+          <iframe src="https://open.spotify.com/embed/track/5rCVuNbPVCctllSavYOhR8?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRACKS -->
+    <section id="tracks" aria-labelledby="h-tracks">
+      <h2 id="h-tracks">Все треки</h2>
+      <div class="tracks">
+        <div class="card">
+          <iframe src="https://open.spotify.com/embed/track/4zLiuafv99FGQ3pMK2eUDz?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+        </div>
+        <div class="card">
+          <iframe src="https://open.spotify.com/embed/track/5rCVuNbPVCctllSavYOhR8?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+        </div>
+        <div class="card">
+          <iframe src="https://open.spotify.com/embed/track/1wwV1wwid209AZlpBNVrdH?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+        </div>
+      </div>
+      <p style="margin-top:1rem;color:#9aa">Следите за обновлениями — новые треки появятся здесь.</p>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" aria-labelledby="h-about">
+      <h2 id="h-about">О RGG LIDE</h2>
+      <div class="card">
+        <p>RGG LIDE — музыкальный проект, исследующий границы между шумом и мелодией. С помощью глитч-эстетики создаются минималистичные, но мощные звуковые текстуры.</p>
+        <p style="margin-top:.75rem;color:#9aa">Контакты: <a class="mail" href="mailto:your@email.com">your@email.com</a></p>
+      </div>
+    </section>
+
+    <!-- NEWS (Telegram widget + запасной вариант) -->
+    <section id="news" aria-labelledby="h-news">
+      <h2 id="h-news">Новости</h2>
+
+      <div id="news-card" class="card">
+        <!-- Подставь сюда свой канал и номер поста: data-telegram-post="channel/ID" -->
+        <!-- Ниже мы динамически подгрузим виджет — если он не загрузится, покажем запасной блок -->
+        <div id="telegram-container" aria-live="polite">
+          <!-- скрипт подгрузится динамически -->
+          <noscript class="fallback">Включите JavaScript, чтобы увидеть встроенные посты. Пока что — <a href="https://t.me/rgglide" target="_blank" rel="noopener">перейти в Telegram</a>.</noscript>
+        </div>
+
+        <div id="news-fallback" style="display:none; margin-top:1rem" class="fallback">
+          Не удалось загрузить виджет Telegram. Вот последние ссылки:
+          <ul style="margin:.5rem 0 0 1rem; padding:0; color:#cce;">
+            <li><a href="https://t.me/rgglide/1" target="_blank" rel="noopener">Пост 1 — t.me/rgglide/1</a></li>
+            <li><a href="https://t.me/rgglide/2" target="_blank" rel="noopener">Пост 2 — t.me/rgglide/2</a></li>
+          </ul>
+          <p style="margin:.5rem 0 0 0;color:#9aa">Откройте страницу в браузере по https или на локальном сервере для корректной загрузки виджета.</p>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    © <span id="year"></span> RGG LIDE — Все права защищены.
+  </footer>
+
+  <script>
+    /* ---- работа вкладок ---- */
+    (function(){
+      const links = document.querySelectorAll('nav a[data-tab]');
+      const sections = document.querySelectorAll('main section');
+
+      function show(tab){
+        sections.forEach(s => s.style.display = (s.id === tab ? 'block' : 'none'));
+        links.forEach(l => l.classList.toggle('active', l.dataset.tab === tab));
+        // update hash without scrolling
+        if(history.replaceState) history.replaceState(null, '', '#'+tab);
+        else location.hash = '#'+tab;
+      }
+
+      links.forEach(a => {
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          show(a.dataset.tab);
+        });
+      });
+
+      // открыть секцию по хэшу или home по умолчанию
+      const hash = (location.hash||'#home').replace('#','');
+      show( document.querySelector('nav a[data-tab="'+hash+'"]') ? hash : 'home' );
+
+      // выставить год в футер
+      document.getElementById('year').textContent = new Date().getFullYear();
+    })();
+
+    /* ---- попытка загрузить Telegram-widget динамически + fallback ----
+       ВАЖНО: Telegram виджет корректно работает только при открытии по https:// или localhost.
+       Если вы открываете файл через file:// — виджет не загрузится, тогда покажется fallback.
+       Замените data-telegram-post на ваш канал/номер поста (например: "rgglide/1"). */
+    (function(){
+      const telegramContainer = document.getElementById('telegram-container');
+      const fallback = document.getElementById('news-fallback');
+
+      // Настройки: укажи свой канал и пост(ы)
+      // Формат: "channelName/postNumber" — если хочешь показать другой пост, поменяй.
+      const telegramPost = 'rgglide/3'; // ← ЗАМЕНИ на свой, например 'mychannel/23'
+      const TELEGRAM_WIDGET_SRC = 'https://telegram.org/js/telegram-widget.js?22';
+
+      // Создаём скрипт виджета
+      function injectWidget(){
+        // очищаем контейнер
+        telegramContainer.innerHTML = '';
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = TELEGRAM_WIDGET_SRC;
+        script.setAttribute('data-telegram-post', telegramPost);
+        script.setAttribute('data-width', '100%');
+        script.onload = () => {
+          // после загрузки скрипта — виджет автоматически рендерится в контейнер,
+          // но иногда это может занять долю секунды. Подождём и проверим.
+          setTimeout(checkWidgetLoaded, 700);
+        };
+        script.onerror = () => {
+          showFallback();
+        };
+
+        telegramContainer.appendChild(script);
+      }
+
+      // проверяем наличие iframe/вставленного блока
+      function checkWidgetLoaded(){
+        // встраиваемый виджет создаёт iframe внутри контейнера — ищем iframe
+        const iframe = telegramContainer.querySelector('iframe');
+        if(iframe) {
+          // успешно
+          fallback.style.display = 'none';
+          telegramContainer.style.display = 'block';
+        } else {
+          // возможно заблокировано (CSP/локальный файл). Показываем запасной вариант.
+          showFallback();
+        }
+      }
+
+      function showFallback(){
+        telegramContainer.style.display = 'none';
+        fallback.style.display = 'block';
+      }
+
+      // если страница открыта по http(s) или localhost — пробуем загрузить виджет
+      const isSecure = location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+      if(isSecure){
+        injectWidget();
+        // дополнительная проверка на случай медленной сети
+        setTimeout(checkWidgetLoaded, 1600);
+      } else {
+        // если не https (например file://), сразу показываем запасной вариант
+        showFallback();
+      }
+    })();
+  </script>
+</body>
+  </html>
