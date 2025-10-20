@@ -14,7 +14,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .header {
     background-color: rgba(36, 12, 49, 0.4);
-    padding: 4px;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
