@@ -1,21 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RGG-LIDE - Страница</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=menu" />
+    <meta property="og:title" content="RGG-LIDE - Официальная страница">
+    <meta property="og:description" content="Слушайте топовые треки RGG-LIDE">
+    <meta property="og:image" content="cover.jpg">
+    <meta name="description" content="RGG-LIDE - музыкальный исполнитель. Топ треков и новинки.">
+    <title>
+        RGG-LIDE - Страница
+    </title>
+    <link rel="canonical" href="https://rggoliksn.github.io/RGG-LIDE/">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=menu" />
 </head>
 <body>
     <header class="header" id="header">
-            <h1 class="headerlide headertext">RGG-LIDE</h1>
-            <h2 class="headerinfo headertext">Информация</h2>
-            <h2 class="headersocial headertext">Связь</h2>
+            <h1 class="headerlide headertext" onclick="home()">
+                RGG-LIDE
+            </h1>
+            <h2 class="headerinfo headertext" onclick="info()">
+                Информация
+            </h2>
+            <h2 class="headersocial headertext" onclick="social()">
+                Связь
+            </h2>
     </header>
     <div class="main1">
-        
+        <div class="toptracks">
+            <h1 class="toptracksh1 toptracktext">
+                Топ треков
+            </h1>
+            <h2 class="toptracksh2 toptracktext">
+                Топ треков RGG-LIDE
+            </h2>
+            <h2 class="toptracksh22 toptracktext">
+                Обновлено 20.10.25 (RU format)
+            </h2>
+            <div class="top1track">
+                <h2 class="top1">
+                    1. 7z
+                </h2>
+                <button class="gotop1 buttongo" onclick="top1()">
+                    Слушать (ВК МУЗЫКА)
+                </button>
+            </div>
+            <div class="top2track">
+                <h2 class="top2">
+                    2. To Night
+                </h2>
+                <button class="gotop2 buttongo" onclick="top2()">
+                    Слушать (ВК МУЗЫКА)
+                </button>
+            </div>
+            <div class="top3track">
+                <h2 class="top3">
+                    3. CHROMANOTE
+                </h2>
+                <h4 class="abouttop3">
+                    Самый новый релиз.
+                </h4>
+                <button class="gotop3 buttongo" onclick="top3()">
+                    Слушать (ВК МУЗЫКА)
+                </button>
+            </div>
+        </div>
     </div>
-    <script src="index.js"></script>
+    <script src="index.js">
+    </script>
 </body>
 </html>
