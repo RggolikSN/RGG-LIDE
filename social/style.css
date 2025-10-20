@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+
+body {
+    background-color: rgb(14, 10, 17);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: rgb(212, 169, 255);
+    font-family: "Nunito Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300px;
+    font-style: normal;
+}
+
+.header {
+    background-color: rgba(36, 12, 49, 0.4);
+    padding: 4px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+            align-items: center;
+    padding: 0 15px;
+    border-radius: 2vh;
+    backdrop-filter: blur(20px);
+    z-index: 228;
+    position: sticky;
+    top: 10px;
+    transition: all 1s ease-in-out;
+}
+
+.headerinfo {
+    margin-left: auto;
+    margin-right: 2vh;
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1) 0.75s;
+}
+
+.headerlide {
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1) 0.75s;
+}
+
+.headersocial {
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1) 0.75s;
+}
+
+.headertext {
+    cursor: pointer;
+    background-color: rgba(63, 6, 95, 0.0);
+    padding: 0px 5px;
+    border-radius: 1vh;
+}
+
+.headerinfo:hover {
+    background-color: rgba(63, 6, 95, 0.1);
+    color: rgb(223, 191, 255);;
+}
+
+.headerlide:hover {
+    background-color: rgba(63, 6, 95, 0.1);
+    color: rgb(223, 191, 255);;
+}
+
+.headersocial:hover {
+    background-color: rgba(63, 6, 95, 0.1);
+    color: rgb(223, 191, 255);;
+}
