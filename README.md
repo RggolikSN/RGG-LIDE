@@ -1,5 +1,7 @@
 # RGG-LIDE
 
+[![Go to site](https://img.shields.io/badge/Go_to-site-green.svg)](https://rggoliksn.github.io/RGG-LIDE)
+
 The website was created to promote and catalog tracks by RGG-LIDE (an aspiring musician).
 
 The site was made by me only for the musician RGG-LIDE (me).
